@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { columns, getRowMap, IRowData } from "./data";
 import { FaPlusSquare, FaMinusSquare } from "react-icons/fa";
 import rfdc from "rfdc";
+import Pagination from "./pagination";
+import { current } from "@reduxjs/toolkit";
 
 const TableHeader = () => {
   return (
@@ -17,11 +19,26 @@ const clone = rfdc();
 let pageSize = 10;
 
 // const paginatedRows = ()
+const getPaginatedRows = (
+  currentShowingRows: string[],
+  currentPage: number
+) => {
+  const firstPageIndex = (currentPage - 1) * pageSize;
+  const lastPageIndex = firstPageIndex + pageSize;
+  return currentShowingRows.slice(firstPageIndex, lastPageIndex);
+};
 
 const ExpandableTable = () => {
   const defaultrowMap = getRowMap();
   const [rowMap, setRowMap] = useState(defaultrowMap);
   const rowKeys = Array.from(rowMap.keys());
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const currentShowingRows = rowKeys.filter((d) => rowMap.get(d)?.show);
+
+  const handlePageChange = (page: number) => setCurrentPage(page);
+  const paginatedRows = getPaginatedRows(currentShowingRows, currentPage);
+  const totalCount = currentShowingRows.length;
 
   const updateExpandonRows = (
     rowKey: string,
@@ -78,7 +95,7 @@ const ExpandableTable = () => {
         <div className="row-item">MRDM</div>
         <div className="row-item">Description</div>
       </div>
-      {rowKeys.map((rowKey, rowIndex) => {
+      {paginatedRows.map((rowKey, rowIndex) => {
         const rowData = rowMap.get(rowKey) as IRowData;
         const isChild = !rowData.children || rowData?.children.length === 0;
         const leftPadding =
@@ -126,6 +143,13 @@ const ExpandableTable = () => {
           </div>
         );
       })}
+      <Pagination
+        className="pagination-bar"
+        currentPage={currentPage}
+        totalCount={totalCount}
+        pageSize={pageSize}
+        onPageChange={(page: number) => handlePageChange(page)}
+      />
     </div>
   );
 };
