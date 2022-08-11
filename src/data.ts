@@ -8,6 +8,7 @@ export interface IRowData {
   mrdm?: string;
   description?: string;
   children?: IRowData[];
+  show?: boolean;
 }
 
 export const columns = [
@@ -142,8 +143,69 @@ export const hierarchyData = [
   },
 ];
 
+export const makeDummyData = () => {
+  let hierData = [];
+
+  for (let i = 0; i < 10; i++) {
+    let rowObj = {
+      id: `Level1#${i}`,
+      type: "Use Case Section",
+      level: 1,
+      name: `Test_${i} Section `,
+      blt: `blt${i}`,
+      mrdm: "SRDM: 23",
+      description: "long desc",
+      show: true,
+      expanded: false,
+      children: [],
+    };
+    rowObj.children = makeLineItemAndDataElement(i, "li");
+    hierData.push(rowObj);
+  }
+  return hierData;
+};
+
+const getchildid = (
+  parentLevel: number,
+  child: string,
+  index: number,
+  childLevel?: number
+) => {
+  if (child === "li") {
+    return `Level1#${parentLevel}-Level2#${index}`;
+  }
+  return `Level1#${parentLevel}-Level2#${childLevel}-Level3#${index}`;
+};
+
+const makeLineItemAndDataElement = (
+  parentLevel: number,
+  child: string,
+  childLevel?: number
+): any => {
+  let childData = [];
+  for (let i = 0; i < 3; i++) {
+    const name = child === "li" ? "Line Item" : "Data Element";
+    let lineItemObj = {
+      id: getchildid(parentLevel, child, i, childLevel),
+      type: `Use Case ${name}`,
+      level: childLevel ? 3 : 2,
+      name: `Test_${i} ${name}`,
+      blt: "",
+      description: "long desc",
+      show: false,
+      children: child === "li" ? [] : undefined,
+    };
+    if (lineItemObj.children) {
+      lineItemObj.children = makeLineItemAndDataElement(parentLevel, "de", i);
+    }
+    childData.push(lineItemObj);
+  }
+  return childData;
+};
+
 export const getRowMap = (): Map<string, IRowData> => {
-  const rowMap = flattenRows(hierarchyData);
+  let hierData = makeDummyData();
+  const rowMap = flattenRows(hierData);
   return rowMap;
 };
 
