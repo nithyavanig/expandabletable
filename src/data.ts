@@ -13,24 +13,40 @@ export interface IRowData {
 
 export const columns = [
   {
-    name: "exp",
-    id: "col-exp",
+    name: "Element Name",
+    id: "name",
+    sort: true,
+    wordWrap: true,
+    showExpand: true,
+    visible: true,
   },
   {
-    name: "type",
-    id: "col-type",
+    name: "Type",
+    id: "type",
+    sort: true,
+    wordWrap: true,
+    visible: true,
   },
   {
-    name: "blt",
-    id: "col-blt",
+    name: "Business Logic Text",
+    id: "blt",
+    sort: true,
+    wordWrap: true,
+    visible: true,
   },
   {
-    name: "mrdm",
-    id: "col-mrdm",
+    name: "MRDM",
+    id: "mrdm",
+    sort: true,
+    wordWrap: true,
+    visible: true,
   },
   {
-    name: "description",
-    id: "col-description",
+    name: "Description",
+    id: "description",
+    sort: true,
+    wordWrap: true,
+    visible: true,
   },
 ];
 
@@ -43,6 +59,7 @@ export const hierarchyData = [
     blt: "blt1",
     mrdm: "SDF:23#",
     description: "long desc",
+    show: true,
     children: [
       {
         id: "Lev1#1-Lev2#1",
@@ -51,6 +68,7 @@ export const hierarchyData = [
         name: "Test_1 Line Item",
         blt: "",
         description: "long desc",
+        show: false,
         children: [
           {
             id: "Lev1#1-Lev2#1-Lv3#1",
@@ -60,6 +78,7 @@ export const hierarchyData = [
             name: "Test_1 Data Element 1",
             blt: "",
             description: "long desc",
+            show: false,
           },
           {
             id: "Lev1#1-Lev2#1-Lv3#2",
@@ -69,6 +88,7 @@ export const hierarchyData = [
             name: "Test_1 Data Element 2",
             blt: "",
             description: "long desc",
+            show: false,
           },
         ],
       },
@@ -81,6 +101,7 @@ export const hierarchyData = [
     name: "Test_1 Section",
     blt: "blt1",
     description: "long desc",
+    show: true,
     children: [
       {
         id: "Lev1#2-Lev2#1",
@@ -89,6 +110,7 @@ export const hierarchyData = [
         name: "Test_1 Line Item",
         blt: "",
         description: "long desc",
+        show: false,
         children: [
           {
             id: "Lev1#2-Lev2#1-Lev3#1",
@@ -98,6 +120,7 @@ export const hierarchyData = [
             name: "Test_1 Data Element 1",
             blt: "",
             description: "long desc",
+            show: false,
           },
           {
             id: "Lev1#2-Lev2#1-Lev3#2",
@@ -107,6 +130,7 @@ export const hierarchyData = [
             name: "Test_1 Data Element 2",
             blt: "",
             description: "long desc",
+            show: false,
           },
         ],
       },
@@ -118,6 +142,7 @@ export const hierarchyData = [
         name: "Test_2 Line Item",
         blt: "",
         description: "long desc",
+        show: false,
         children: [
           {
             id: "Lev1#2-Lev2#2-Lev3#1",
@@ -127,6 +152,7 @@ export const hierarchyData = [
             name: "Test_2 Data Element 1",
             blt: "",
             description: "long desc",
+            show: false,
           },
           {
             id: "Lev1#2-Lev2#2-Lev3#2",
@@ -136,6 +162,7 @@ export const hierarchyData = [
             name: "Test_2 Data Element 2",
             blt: "",
             description: "long desc",
+            show: false,
           },
         ],
       },
@@ -165,23 +192,14 @@ export const makeDummyData = () => {
   return hierData;
 };
 
-const getchildid = (
-  parentLevel: number,
-  child: string,
-  index: number,
-  childLevel?: number
-) => {
+const getchildid = (parentLevel: number, child: string, index: number, childLevel?: number) => {
   if (child === "li") {
     return `Level1#${parentLevel}-Level2#${index}`;
   }
   return `Level1#${parentLevel}-Level2#${childLevel}-Level3#${index}`;
 };
 
-const makeLineItemAndDataElement = (
-  parentLevel: number,
-  child: string,
-  childLevel?: number
-): any => {
+const makeLineItemAndDataElement = (parentLevel: number, child: string, childLevel?: number): any => {
   let childData = [];
   for (let i = 0; i < 3; i++) {
     const name = child === "li" ? "Line Item" : "Data Element";

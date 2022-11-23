@@ -2,17 +2,10 @@ import React from "react";
 import classnames from "classnames";
 import { usePagination, DOTS } from "./usePagination";
 import "./pagination.less";
+import { TPrimitive } from "./hierarchytable";
 
-export type TPrimitive = string | number;
 const Pagination = (props: any) => {
-  const {
-    onPageChange,
-    totalCount,
-    siblingCount = 1,
-    currentPage,
-    pageSize,
-    className,
-  } = props;
+  const { onPageChange, totalCount, siblingCount = 1, currentPage, pageSize, className } = props;
 
   const paginationRange: TPrimitive[] = usePagination({
     currentPage,
@@ -35,9 +28,7 @@ const Pagination = (props: any) => {
 
   let lastPage = paginationRange[paginationRange.length - 1];
   return (
-    <ul
-      className={classnames("pagination-container", { [className]: className })}
-    >
+    <ul className={classnames("pagination-container", { [className]: className })}>
       <li
         className={classnames("pagination-item", {
           disabled: currentPage === 1,
